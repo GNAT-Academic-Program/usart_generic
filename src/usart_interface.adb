@@ -1,41 +1,50 @@
+with Usart_Control;
+with Usart_Data;
 package body Usart_Interface is
 
-   procedure Open
-     (Dev    : in out Device;
-      Cfg    : Usart_Types.Usart_Config;
-      Result : out Usart_Types.Status) is
+   package Control is new Usart_Control 
+     (Device       => Device, 
+      Driver_Init  => Driver_Init,
+      Driver_Start =>  Driver_Start,
+      Driver_Stop  => Driver_Stop,
+      Driver_Reset => Driver_Reset);
+
+   package Data is new Usart_Data
+     (Device         => Device, 
+      Driver_Tx_Push => Driver_Tx_Push,
+      Driver_Rx_Pop  =>  Driver_Rx_Pop);
+
+   procedure Open (Dev : in out Device;
+                   Cfg : Usart_Types.Usart_Config) is
    begin
-      Control.Reset (Dev, Result);
-      if not Usart_Types.Success (Result) then
-         return;
-      end if;
-      Control.Init (Dev, Cfg, Result);
-      if not Usart_Types.Success (Result) then
-         return;
-      end if;
-      Control.Start (Dev, Result);
+      Control.Reset (Dev);
+      Control.Init  (Dev, Cfg);
+      Control.Start (Dev);
    end Open;
 
    procedure Close (Dev : in out Device) is
-      use Usart_Types;
-      Result : Status := (Kind => Ok);
    begin
-      Control.Stop (Dev, Result);
+      Control.Stop (Dev);
    end Close;
 
-   procedure Write
-     (Dev     : in out Device;
-      Buf     : Storage_Array;
-      Written : out Natural) is
+   procedure Write (Dev     : in out Device;
+                    Buf     : Storage_Array;
+                    Written : out Natural) is
    begin
+      if Buf'Length = 0 then
+         Written := 0;
+         return;
+      end if;
       Data.Write (Dev, Buf, Written);
    end Write;
 
-   procedure Read
-     (Dev  : in out Device;
-      Buf  : out Storage_Array;
-      Read : out Natural) is
+   procedure Read (Dev  : in out Device;
+                   Buf  : out Storage_Array;
+                   Read : out Natural) is
    begin
+      if Buf'Length = 0 then
+         raise Usart_Types.USART_Error with "Read: zero-length buffer";
+      end if;
       Data.Read (Dev, Buf, Read);
    end Read;
 

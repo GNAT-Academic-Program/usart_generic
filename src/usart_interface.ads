@@ -1,21 +1,26 @@
 with Usart_Types;
-with Usart_Control;
-with Usart_Data;
 
 with System.Storage_Elements;
 use System.Storage_Elements;
 
 generic
    type Device is limited private;
-
-   with package Control is new Usart_Control (Device => Device, others => <>);
-   with package Data    is new Usart_Data    (Device => Device, others => <>);
+   with procedure Driver_Init    (Dev : in out Device;
+                                  Cfg : Usart_Types.Usart_Config);
+   with procedure Driver_Start   (Dev : in out Device);
+   with procedure Driver_Stop    (Dev : in out Device);
+   with procedure Driver_Reset   (Dev : in out Device);
+   with procedure Driver_Tx_Push (Dev       : in out Device;
+                                  B         : Storage_Element;
+                                  Accepted  : out Boolean);
+   with procedure Driver_Rx_Pop  (Dev       : in out Device;
+                                  B         : out Storage_Element;
+                                  Available : out Boolean);
 
 package Usart_Interface is
    procedure Open
      (Dev    : in out Device;
-      Cfg    : Usart_Types.Usart_Config;
-      Result : out Usart_Types.Status);
+      Cfg    : Usart_Types.Usart_Config);
 
    procedure Close (Dev : in out Device);
 

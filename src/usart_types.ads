@@ -1,20 +1,13 @@
 package Usart_Types is
-   pragma Pure;
-   type Status_Kind is (Ok, Busy, Error, Unsupported, Timeout);
 
-   type Status is record
-      Kind : Status_Kind := Ok;
-   end record;
+   USART_Error        : exception;  -- programming error, bad config, unrecoverable
+   USART_Unsupported  : exception;  -- hardware can't do it (9-bit + parity, etc.)
 
-   function Success (S : Status) return Boolean is (S.Kind = Ok);
-
-   --  type Byte is mod 2**8;
-   --  type Byte_Array is array (Positive range <>) of Byte;
-   --  subtype Byte_Array
+   type Transfer_Status is (Ok, Busy, Timeout);
 
    type Baud_Rate is
      (B1200, B2400, B4800, B9600, B19200, B38400, B57600, B115200,
-      B230400, B460800, B921600, B1M);
+      B230400, B460800, B921600, B1M, B2M);
 
    type Data_Bits_Kind is (Data_7, Data_8, Data_9);
 
