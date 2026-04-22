@@ -14,10 +14,10 @@ package Usart_Data is
 
    procedure Write (Dev     : in out Device;
                     Buf     : Storage_Array;
-                    Written : out Natural);
+                    Written : out Storage_Offset);
 
    procedure Read (Dev  : in out Device;
                    Buf  : out Storage_Array;
-                   Read : out Natural);
+                   Read : out Storage_Offset);
 
 end Usart_Data;

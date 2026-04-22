@@ -3,11 +3,11 @@ with Usart_Data;
 package body Usart_Interface is
 
    package Control is new Usart_Control 
-     (Device       => Device, 
-      Driver_Init  => Driver_Init,
-      Driver_Start =>  Driver_Start,
-      Driver_Stop  => Driver_Stop,
-      Driver_Reset => Driver_Reset);
+     (Device         => Device, 
+      Driver_Init    => Driver_Init,
+      Driver_Enable  =>  Driver_Enable,
+      Driver_Disable => Driver_Disable,
+      Driver_Reset   => Driver_Reset);
 
    package Data is new Usart_Data
      (Device         => Device, 
@@ -19,17 +19,17 @@ package body Usart_Interface is
    begin
       Control.Reset (Dev);
       Control.Init  (Dev, Cfg);
-      Control.Start (Dev);
+      Control.Enable (Dev);
    end Open;
 
    procedure Close (Dev : in out Device) is
    begin
-      Control.Stop (Dev);
+      Control.Disable (Dev);
    end Close;
 
    procedure Write (Dev     : in out Device;
                     Buf     : Storage_Array;
-                    Written : out Natural) is
+                    Written : out Storage_Offset) is
    begin
       if Buf'Length = 0 then
          Written := 0;
@@ -38,14 +38,14 @@ package body Usart_Interface is
       Data.Write (Dev, Buf, Written);
    end Write;
 
-   procedure Read (Dev  : in out Device;
-                   Buf  : out Storage_Array;
-                   Read : out Natural) is
+   procedure Read (Dev      : in out Device;
+                   Buf      : out Storage_Array;
+                   Received : out Storage_Offset) is
    begin
       if Buf'Length = 0 then
          raise Usart_Types.USART_Error with "Read: zero-length buffer";
       end if;
-      Data.Read (Dev, Buf, Read);
+      Data.Read (Dev, Buf, Received);
    end Read;
 
 end Usart_Interface;

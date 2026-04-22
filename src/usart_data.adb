@@ -2,7 +2,7 @@ package body Usart_Data is
 
    procedure Write (Dev     : in out Device;
                     Buf     : Storage_Array;
-                    Written : out Natural) is
+                    Written : out Storage_Offset) is
       Accepted : Boolean;
    begin
       Written := 0;
@@ -21,7 +21,7 @@ package body Usart_Data is
 
    procedure Read (Dev  : in out Device;
                    Buf  : out Storage_Array;
-                   Read : out Natural) is
+                   Read : out Storage_Offset) is
       B : Storage_Element;
       Available : Boolean;
    begin

@@ -7,8 +7,8 @@ generic
    type Device is limited private;
    with procedure Driver_Init    (Dev : in out Device;
                                   Cfg : Usart_Types.Usart_Config);
-   with procedure Driver_Start   (Dev : in out Device);
-   with procedure Driver_Stop    (Dev : in out Device);
+   with procedure Driver_Enable  (Dev : in out Device);
+   with procedure Driver_Disable (Dev : in out Device);
    with procedure Driver_Reset   (Dev : in out Device);
    with procedure Driver_Tx_Push (Dev       : in out Device;
                                   B         : Storage_Element;
@@ -27,12 +27,12 @@ package Usart_Interface is
    procedure Write
      (Dev     : in out Device;
       Buf     : Storage_Array;
-      Written : out Natural);
+      Written : out Storage_Offset);
 
    procedure Read
-     (Dev  : in out Device;
-      Buf  : out Storage_Array;
-      Read : out Natural);
+     (Dev      : in out Device;
+      Buf      : out Storage_Array;
+      Received : out Storage_Offset);
 
    -- Add more portable policy here later:
    -- Write_Blocking, Read_Exactly, Recover, Flush, etc.
