@@ -4,20 +4,22 @@ with System.Storage_Elements;
 use System.Storage_Elements;
 
 generic
-   type Device is limited private;
-   with procedure Driver_Init    (Dev : in out Device;
+   type Device_T is limited private;
+   with procedure Driver_Init    (Dev : in out Device_T;
                                   Cfg : Usart_Types.Usart_Config);
-   with procedure Driver_Enable  (Dev : in out Device);
-   with procedure Driver_Disable (Dev : in out Device);
-   with procedure Driver_Reset   (Dev : in out Device);
-   with procedure Driver_Tx_Push (Dev       : in out Device;
+   with procedure Driver_Enable  (Dev : in out Device_T);
+   with procedure Driver_Disable (Dev : in out Device_T);
+   with procedure Driver_Reset   (Dev : in out Device_T);
+   with procedure Driver_Tx_Push (Dev       : in out Device_T;
                                   B         : Storage_Element;
                                   Accepted  : out Boolean);
-   with procedure Driver_Rx_Pop  (Dev       : in out Device;
+   with procedure Driver_Rx_Pop  (Dev       : in out Device_T;
                                   B         : out Storage_Element;
                                   Available : out Boolean);
 
 package Usart_Interface is
+   subtype Device is Device_T;
+
    procedure Open
      (Dev    : in out Device;
       Cfg    : Usart_Types.Usart_Config);

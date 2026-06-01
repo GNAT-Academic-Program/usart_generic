@@ -5,14 +5,14 @@ package body Usart_Interface is
    package Control is new Usart_Control 
      (Device         => Device, 
       Driver_Init    => Driver_Init,
-      Driver_Enable  =>  Driver_Enable,
+      Driver_Enable  => Driver_Enable,
       Driver_Disable => Driver_Disable,
       Driver_Reset   => Driver_Reset);
 
    package Data is new Usart_Data
      (Device         => Device, 
       Driver_Tx_Push => Driver_Tx_Push,
-      Driver_Rx_Pop  =>  Driver_Rx_Pop);
+      Driver_Rx_Pop  => Driver_Rx_Pop);
 
    procedure Open (Dev : in out Device;
                    Cfg : Usart_Types.Usart_Config) is
