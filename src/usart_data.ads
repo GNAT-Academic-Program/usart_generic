@@ -2,22 +2,16 @@ with System.Storage_Elements;
 use System.Storage_Elements;
 
 generic
-   type Device is limited private;
-
-   with procedure Driver_Tx_Push (Dev       : in out Device;
-                                  B         : Storage_Element;
+   with procedure Driver_Tx_Push (B         : Storage_Element;
                                   Accepted  : out Boolean);
-   with procedure Driver_Rx_Pop  (Dev       : in out Device;
-                                  B         : out Storage_Element;
+   with procedure Driver_Rx_Pop  (B         : out Storage_Element;
                                   Available : out Boolean);
 package Usart_Data is
 
-   procedure Write (Dev     : in out Device;
-                    Buf     : Storage_Array;
+   procedure Write (Buf     : Storage_Array;
                     Written : out Storage_Offset);
 
-   procedure Read (Dev  : in out Device;
-                   Buf  : out Storage_Array;
+   procedure Read (Buf  : out Storage_Array;
                    Read : out Storage_Offset);
 
 end Usart_Data;

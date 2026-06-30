@@ -1,14 +1,13 @@
 package body Usart_Data is
 
-   procedure Write (Dev     : in out Device;
-                    Buf     : Storage_Array;
+   procedure Write (Buf     : Storage_Array;
                     Written : out Storage_Offset) is
       Accepted : Boolean;
    begin
       Written := 0;
 
       for I in Buf'Range loop
-         Driver_Tx_Push (Dev, Buf (I), Accepted);
+         Driver_Tx_Push (Buf (I), Accepted);
 
          if not Accepted then
             -- Backend cannot accept more data right now
@@ -19,8 +18,7 @@ package body Usart_Data is
       end loop;
    end Write;
 
-   procedure Read (Dev  : in out Device;
-                   Buf  : out Storage_Array;
+   procedure Read (Buf  : out Storage_Array;
                    Read : out Storage_Offset) is
       B : Storage_Element;
       Available : Boolean;
@@ -28,7 +26,7 @@ package body Usart_Data is
       Read := 0;
 
       for I in Buf'Range loop
-         Driver_Rx_Pop (Dev, B, Available);
+         Driver_Rx_Pop (B, Available);
 
          if not Available then
             -- No more data available right now

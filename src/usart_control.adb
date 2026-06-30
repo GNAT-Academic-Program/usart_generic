@@ -1,28 +1,23 @@
 package body Usart_Control is
 
-   procedure Init
-     (Dev    : in out Device;
-      Cfg    : Usart_Types.Usart_Config) is
+   procedure Init (Cfg : Usart_Types.Usart_Config) is
    begin
-      Driver_Init (Dev, Cfg);
+      Driver_Init (Cfg);
    end Init;
 
-   procedure Enable
-     (Dev    : in out Device) is
+   procedure Enable is
    begin
-      Driver_Enable (Dev);
+      Driver_Enable;
    end Enable;
 
-   procedure Disable
-     (Dev    : in out Device) is
+   procedure Disable is
    begin
-      Driver_Disable (Dev);
+      Driver_Disable;
    end Disable;
 
-   procedure Reset
-     (Dev    : in out Device) is
+   procedure Reset is
    begin
-      Driver_Reset (Dev);
+      Driver_Reset;
    end Reset;
 
 end Usart_Control;

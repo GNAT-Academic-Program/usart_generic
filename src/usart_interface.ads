@@ -3,38 +3,33 @@ with Usart_Types;
 with System.Storage_Elements;
 use System.Storage_Elements;
 
+--  USART_Interface models a physical USART peripheral (USART1, USART2, etc.).
+--  The instantiation IS the bus. There is no Device_T.
+--
+--  USART is a one-level abstraction: bus = device. You never have two software
+--  clients sharing the same UART.
+
 generic
-   type Device_T is limited private;
-   with procedure Driver_Init    (Dev : in out Device_T;
-                                  Cfg : Usart_Types.Usart_Config);
-   with procedure Driver_Enable  (Dev : in out Device_T);
-   with procedure Driver_Disable (Dev : in out Device_T);
-   with procedure Driver_Reset   (Dev : in out Device_T);
-   with procedure Driver_Tx_Push (Dev       : in out Device_T;
-                                  B         : Storage_Element;
+   with procedure Driver_Init    (Cfg : Usart_Types.Usart_Config);
+   with procedure Driver_Enable;
+   with procedure Driver_Disable;
+   with procedure Driver_Reset;
+   with procedure Driver_Tx_Push (B         : Storage_Element;
                                   Accepted  : out Boolean);
-   with procedure Driver_Rx_Pop  (Dev       : in out Device_T;
-                                  B         : out Storage_Element;
+   with procedure Driver_Rx_Pop  (B         : out Storage_Element;
                                   Available : out Boolean);
 
 package Usart_Interface is
-   subtype Device is Device_T;
 
-   procedure Open
-     (Dev    : in out Device;
-      Cfg    : Usart_Types.Usart_Config);
+   procedure Open (Cfg : Usart_Types.Usart_Config);
 
-   procedure Close (Dev : in out Device);
+   procedure Close;
 
-   procedure Write
-     (Dev     : in out Device;
-      Buf     : Storage_Array;
-      Written : out Storage_Offset);
+   procedure Write (Buf     : Storage_Array;
+                    Written : out Storage_Offset);
 
-   procedure Read
-     (Dev      : in out Device;
-      Buf      : out Storage_Array;
-      Received : out Storage_Offset);
+   procedure Read (Buf      : out Storage_Array;
+                   Received : out Storage_Offset);
 
    -- Add more portable policy here later:
    -- Write_Blocking, Read_Exactly, Recover, Flush, etc.

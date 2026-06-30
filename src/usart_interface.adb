@@ -2,50 +2,45 @@ with Usart_Control;
 with Usart_Data;
 package body Usart_Interface is
 
-   package Control is new Usart_Control 
-     (Device         => Device, 
-      Driver_Init    => Driver_Init,
+   package Control is new Usart_Control
+     (Driver_Init    => Driver_Init,
       Driver_Enable  => Driver_Enable,
       Driver_Disable => Driver_Disable,
       Driver_Reset   => Driver_Reset);
 
    package Data is new Usart_Data
-     (Device         => Device, 
-      Driver_Tx_Push => Driver_Tx_Push,
+     (Driver_Tx_Push => Driver_Tx_Push,
       Driver_Rx_Pop  => Driver_Rx_Pop);
 
-   procedure Open (Dev : in out Device;
-                   Cfg : Usart_Types.Usart_Config) is
+   procedure Open (Cfg : Usart_Types.Usart_Config) is
    begin
-      Control.Reset (Dev);
-      Control.Init  (Dev, Cfg);
-      Control.Enable (Dev);
+      Control.Reset;
+      Control.Init (Cfg);
+      Control.Enable;
    end Open;
 
-   procedure Close (Dev : in out Device) is
+   procedure Close is
    begin
-      Control.Disable (Dev);
+      Control.Disable;
    end Close;
 
-   procedure Write (Dev     : in out Device;
-                    Buf     : Storage_Array;
+   procedure Write (Buf     : Storage_Array;
                     Written : out Storage_Offset) is
    begin
       if Buf'Length = 0 then
          Written := 0;
          return;
       end if;
-      Data.Write (Dev, Buf, Written);
+      Data.Write (Buf, Written);
    end Write;
 
-   procedure Read (Dev      : in out Device;
-                   Buf      : out Storage_Array;
+   procedure Read (Buf      : out Storage_Array;
                    Received : out Storage_Offset) is
    begin
       if Buf'Length = 0 then
          raise Usart_Types.USART_Error with "Read: zero-length buffer";
       end if;
-      Data.Read (Dev, Buf, Received);
+      Data.Read (Buf, Received);
    end Read;
 
 end Usart_Interface;
