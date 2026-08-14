@@ -1,5 +1,5 @@
 name = "usart_generic"
-description = ""
+description = "Generic USART interface for bare-metal Ada"
 version = "0.1.0-dev"
 
 authors = ["Olivier Henley"]
